@@ -1,7 +1,19 @@
-# 11401_CS203A
+# 📘 11401_CS203A
 
-**Name:** 陳建宇  
-**Student ID:** 1133316  
-**Course:** CS203A - Introduction to Computer Science  
-**Description:**  
-元智大學大二上學期的資料結構作業一
+## 👤 Student Info
+- **Name:** 陳建宇  
+- **Student ID:** 1133316  
+- **Course:** CS203A - Introduction to Computer Science  
+
+---
+
+## 📖 Repository Description
+元智大學大二上學期資料結構
+開始練習用github
+
+---
+
+## 🌐 GitHub Pages
+🔗 [View the GitHub Pages site](https://ericchen9411.github.io/11401_CS203A/)  
+
+---
