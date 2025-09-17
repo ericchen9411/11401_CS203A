@@ -14,6 +14,6 @@
 ---
 
 ## 🌐 GitHub Pages
-🔗 [View the GitHub Pages site](https://ericchen9411.github.io/11401_CS203A/)  
+🔗 [View the GitHub Pages site](https://ericchen9411.github.io/)  
 
 ---
