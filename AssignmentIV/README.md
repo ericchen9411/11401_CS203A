@@ -1,174 +1,151 @@
-# Assignment IV: Hash Function Design & Observation
+# Homework Assignment IV: Hash Function Design & Observation (C/C++ Version)
 
-## Important Dates
-- **Due Date**: 2025.11.23 23:59:59  
-- **Submission**: Submit your code in C and C++ along with `README.md` in your course repository (`11401_CS203A/Assignment/AssignmentIV/`).
+This assignment focuses on the design and observation of hash functions using C/C++. 
+Students are expected to implement and analyze the behavior of hash functions, 
+evaluate their efficiency, and understand their applications in computer science.
 
-## Learning Objectives
-- Understand how the **choice of hash function** and **table size** (m) affects index distribution.
-- Design and implement hash functions for both **integer keys** and **string keys**.
-- Gain practical experience in creating and testing **hash functions** in C and C++.
-- Analyze **index patterns**, **collision rates**, and **distribution uniformity** for various table sizes (m).
-- Learn how to use [Visual Studio Code to connect to your GitHub repository](./VSCode.md) for seamless version control and collaboration.
+Developer: [ericchen9411]  
+Email: [ericchen9411@gmail.com] 
 
-## Repository Structure
-```
-```
-AssignmentIV
-├── C                       # C implementation directory
-│   ├── hash_fn.c           # Hash function implementation in C
-│   ├── hash_fn.h           # Header file for C hash functions
-│   └── main.c              # Main program calling hash functions
-├── CXX                     # C++ implementation directory
-│   ├── hash_fn.cpp         # Hash function implementation in C++
-│   ├── hash_fn.hpp         # Header file for C++ hash functions
-│   └── main.cpp            # Main program calling hash functions
-├── Makefile                # Build configuration file
-├── README.md               # Assignment documentation
-├── README_template.md      # Template for README documentation
-└── VSCode.md               # VS Code setup instructions
-```
+## My Hash Function
+### Integer Keys 
+- Formula / pseudocode:
+  h(k)=∣k∣ mod m
+  [Your implementation here]
+    int myHashInt(int key, int m) {
+    if (m <= 0) return 0;
+    long long k = key;
+    if (k < 0) k = -k;
+    return static_cast<int>(k % m);
+}
 
-## Getting Started
+- Rationale: [Uses the division method, which is simple and efficient.
 
-1. **Clone the Repository**  
-    Clone the repository to your local machine (new folder not your repository folder, e.g. /tmp/):
-    ```bash
-    git clone <repository-url>
-    ```
+Takes absolute value to avoid negative remainders in C++.
 
-2. **Create the Folder in your Respoitory**  
-    Navigate to your repository and create the assignment folder:
-    ```bash
-    cd Assignment
-    mkdir AssignmentIV
-    ```
+When combined with prime numbers for m, the distribution becomes more uniform.
 
-3. **Copy Template Files**  
-    Copy the provided templates and example code:
-    ```bash
-    cp /tmp/11401_CS203A/Assignment/AssignmentIV/README_template.md README.md
-    cp /tmp/11401_CS203A/Assignment/AssignmentIV/Makefile .
-    cp /tmp/11401_CS203A/Assignment/AssignmentIV/VSCode.md .
-    rsync -av /tmp/11401_CS203A/Assignment/AssignmentIV/C .
-    rsync -av /tmp/11401_CS203A/Assignment/AssignmentIV/CXX .
-    ```
+Works well for sequential integer inputs because modulo spreading tends to distribute values evenly when m is not aligned with the key pattern.]
 
-4. **Verify Folder Structure**  
-    Ensure the folder structure is correct:
-    ```bash
-    cd Assignment
-    tree -L 2 AssignmentIV
-    ```
-    Expected output:
-    ```
-    AssignmentIV
-    ├── C
-    │   ├── hash_fn.c
-    │   ├── hash_fn.h
-    │   └── main.c
-    ├── CXX
-    │   ├── hash_fn.cpp
-    │   ├── hash_fn.hpp
-    │   └── main.cpp
-    └── README.md
+### Non-integer Keys
+- Formula / pseudocode:
+    h(s)=((…((s0​⋅B+s1​)⋅B+s2​)⋅B+…)modm
+    B=31 (a commonly used hash base)
+    si is the ASCII value of each character
+  [Your implementation here]
+  int myHashString(const std::string& str, int m) {
+    if (m <= 0) return 0;
+    unsigned long long h = 0;
+    const unsigned int base = 31;
 
-    3 directories, 5 files
-    ```
+    for (unsigned char ch : str) {
+        h = h * base + ch;
+        h %= static_cast<unsigned long long>(m);
+    }
 
-5. **Understand the Code**  
-    - **C**:
-      - `main.c`: Calls your hash function.
-      - `hash_fn.c`: Implement your hash functions here.
-    - **C++**:
-      - `main.cpp`: Calls your hash function.
-      - `hash_fn.cpp`: Implement your hash functions here.
+    return static_cast<int>(h);
+}
 
-6. **Develop, Test, and Document**  
-    - Implement and test your hash functions.
-    - Document your development process and observations in `README.md`.
+- Rationale: [Polynomial rolling hash is widely used in text algorithms.
 
-## Folder Structure in Your Course Repository
-```
-AssignmentIV/
-├── C/                      # C implementation directory
-│   ├── hash_fn.c           # Hash function implementation in C
-│   ├── hash_fn.h           # Header file for C hash functions
-│   └── main.c              # Main program calling hash functions
-├── CXX/                    # C++ implementation directory
-│   ├── hash_fn.cpp         # Hash function implementation in C++
-│   ├── hash_fn.hpp         # Header file for C++ hash functions
-│   └── main.cpp            # Main program calling hash functions
-├── Makefile                # Build configuration file
-├── README.md               # Assignment documentation
-└── VSCode.md               # VS Code setup instructions
-```
+Reduces collision probability for short English words.
 
-## Assignment Instructions
-- **Objective**: Design and implement a hash function in C/C++ and analyze its index distribution.
-- **Steps**:
-  1. Implement the hash function in `hash_fn.c` and `hash_fn.cpp`.
-  2. Use the hash function in `main.c` and `main.cpp`.
-- **Submission**: Push your code and testing results to the repository.
+Works well with prime m because modulo operations distribute values more uniformly.
 
-## Source Code Commit
+Each character contributes to the hash, preventing simple collisions like all-zero results.]
 
-- Make at least three commits for this assignment:
-    1. Initial commit: Add `README.md`, `Makefile`, `VSCode.md` and the example C and C++ template files (`C/hash_fn.c`, `C/hash_fn.h`, `C/main.c`, `CXX/hash_fn.cpp`, `C/hash_fn.hpp`, `CXX/main.cpp`).
-    2. Development commits: Include one or more intermediate commits that record your implementation progress, tests, bug fixes, and small iterative changes. Use descriptive messages (e.g., "implement integer hash", "add string-hash tests", "fix collision handling").
-    3. Final commit: Include the finished code, updated `README.md` with observations, test results, and final evaluation.
+## Experimental Setup
+- Table sizes tested (m): 10, 11, 37
+- Test dataset:
+  - Integers: 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60
+  - Strings: "cat", "dog", "bat", "cow", "ant", "owl", "bee", "hen", "pig", "fox"
+- Compiler: GCC and G++
+- Standard: C23 and C++23!make clean
 
-- Commit guidelines:
-    - Write clear, concise commit messages that summarize the change.
-    - Ensure the `README.md` documents the development history (brief commit log or references to commit IDs) and highlights the final evaluation.
-    - Update `VSCode.md` with your setup experience and any additional configuration steps you discovered during development.
-    - Push all commits to the course repository under `AssignmentIV` before the deadline.
+## Compilation, Build, Execution, and Output
 
-## Coding and Documentation Style
+### Compilation
+- The project uses a comprehensive Makefile that builds both C and C++ versions with proper flags:
+  ```bash
+  # Build both C and C++ versions
+  make all
+  
+  # Build only C version
+  make c
+  
+  # Build only C++ version
+  make cxx
+  ```
 
-To ensure your code is readable, maintainable, and adheres to best practices, follow these guidelines:
+### Manual Compilation (if needed)
+- Command for C:
+  ```bash
+  gcc -std=c23 -Wall -Wextra -Wpedantic -g -o C/hash_function C/main.c C/hash_fn.c
+  ```
+- Command for C++:
+  ```bash
+  g++ -std=c++23 -Wall -Wextra -Wpedantic -g -o CXX/hash_function_cpp CXX/main.cpp CXX/hash_fn.cpp
+  ```
 
-### 1. Code Style
-- **Indentation**: Use consistent indentation (e.g., 4 spaces per level).
-- **Naming Conventions**:
-    - Use `snake_case` for variable and function names in C. Refer to [ISO C Style Guidelines](https://en.cppreference.com/w/c/language/identifier) for more details.
-    - Use `camelCase` or `PascalCase` for variable and function names in C++. Refer to [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-naming) for best practices.
-- **Comments**:
-    - Add meaningful comments to explain the purpose of functions, complex logic, and key sections of code.
-    - Avoid redundant comments that merely restate the code.
-- **Line Length**: Limit lines to 80-100 characters for better readability.
+### Clean Build Files
+- Remove all compiled files:
+  ```bash
+  make clean
+  ```
 
-### 2. Documentation
-- **Function Headers**:
-    - Include a brief description, input parameters, and return values for each function.
-    - Example:
-        ```c
-        /**
-         * @brief Computes the hash index for an integer key.
-         * @param key The integer key to hash.
-         * @param m The table size.
-         * @return The computed hash index.
-         */
-        int myHashInt(int key, int m);
-        ```
-- **File Headers**:
-    - Add a header comment at the top of each file with the file's purpose, author, and modification history.
+### Execution
+- Run the compiled binary:
+  ```bash
+  ./hash_function
+  ```
+  or
+  ```bash
+  ./hash_function_cpp
+  ```
 
-### 3. Testing and Observations
-- Test your hash functions with a variety of inputs and table sizes.
-- Document your findings in the `README.md`:
-    - Include tables or charts showing index distributions.
-    - Analyze collision rates and uniformity of the hash function.
+### Result Snapshot
+- Example output for integers:
+![alt text](image-1.png)
 
-### 4. Error Handling
-- Ensure your code handles edge cases gracefully (e.g., empty strings, zero table size).
-- Validate inputs where necessary and provide meaningful error messages.
+![alt text](image-2.png)
 
-By adhering to these practices, you will develop clean, professional, and well-documented code that is easy to understand and maintain.
+![alt text](image-3.png)
 
-## Notes
-- Ensure your code is well-documented and adheres to the provided coding standards.
-- Include observations and analysis in your `README.md`.
+## Analysis
+Prime vs non-prime table sizes
 
-## References
-- [Learning Git](https://github.com/doggy8088/Learn-Git-in-30-days/tree/master)
+Prime table sizes (11, 37) generally reduce periodic alignment with key patterns.
+
+m = 37 produces the most uniform distribution for both integer and string keys.
+
+Collisions
+
+m = 10 shows repeated patterns because integers are sequential.
+
+m = 11 breaks some patterns but still has collisions.
+
+m = 37 spreads values out significantly → lowest collision count.
+
+Hash Function Effectiveness
+
+Integer hash is predictable but behaves well when m is prime.
+
+String hash performs significantly better with large prime m because the polynomial rolling method interacts well with the modulo arithmetic.
+
+Improvements
+
+Always choose a prime m for better distribution.
+
+For larger datasets, choose even larger m to reduce collision probability.
+
+Alternative string bases (e.g., 131, 257) can further improve scattering.
+
+## Reflection
+
+Designing hash functions involves balancing simplicity and distribution quality.
+
+Table size plays a critical role in distribution even when hash functions are fixed.
+
+This experiment shows that prime table sizes consistently result in fewer collisions.
+
+Polynomial rolling hash is effective for short strings and is widely used in real applications like dictionaries and text searching.

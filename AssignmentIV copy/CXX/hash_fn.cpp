@@ -29,13 +29,14 @@ int myHashInt(int key, int m) {
 int myHashString(const std::string& str, int m) {
     if (m <= 0) return 0;
 
+    // Polynomial rolling hash: h = (h * base + ch) mod m
     unsigned long long h = 0;
-    const unsigned int base = 31;  // polynomial rolling hash base
+    const unsigned int base = 31;  // a common prime-ish base for string hashing
 
     for (unsigned char ch : str) {
         h = h * base + ch;
         h %= static_cast<unsigned long long>(m);
     }
 
-    return static_cast<int>(h);
+    return static_cast<int>(h % m);
 }
